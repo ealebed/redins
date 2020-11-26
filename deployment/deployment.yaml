@@ -3,8 +3,6 @@ kind: ServiceAccount
 metadata:
   name: redins
   namespace: default
-imagePullSecrets:
-- name: dockerhubkey
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
