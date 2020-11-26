@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redins
+  namespace: default
+imagePullSecrets:
+- name: dockerhubkey
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: redins
+roleRef:
+  name: cluster-admin
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: redins
+  namespace: default
+  kind: ServiceAccount
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redins
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redins
+  template:
+    metadata:
+      labels:
+        app: redins
+    spec:
+      serviceAccountName: redins
+      containers:
+      - name: redins
+        image: ealebed/redins:latest
+        env:
+        - name: IN_CLUSTER
+          value: "true"
+        - name: REDIS_HOST
+          value: ads-redis-statistic.default.svc.cluster.local:6379
+        - name: REDIS_DB
+          value: "2"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: dedicated
+                operator: In
+                values:
+                - rtb
+      tolerations:
+      - value: rtb
+        effect: NoExecute
+        key: dedicated
+        operator: Equal
+  strategy:
+    type: Recreate
