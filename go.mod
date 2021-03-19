@@ -17,5 +17,5 @@ require (
 	golang.org/x/sys v0.0.0-20201119102817-f84b799fce68 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	k8s.io/apimachinery v0.20.5
-	k8s.io/client-go v0.20.4
+	k8s.io/client-go v0.20.5
 )
