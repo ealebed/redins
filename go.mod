@@ -12,6 +12,6 @@ require (
 	github.com/onsi/gomega v1.10.3 // indirect
 	golang.org/x/oauth2 v0.0.0-20201109201403-9fd604954f58 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	k8s.io/apimachinery v0.21.2
+	k8s.io/apimachinery v0.21.3
 	k8s.io/client-go v0.21.2
 )
