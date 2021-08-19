@@ -2,7 +2,7 @@
 # Builder
 #
 
-FROM golang:1.15.5 as builder
+FROM golang:1.17 as builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
