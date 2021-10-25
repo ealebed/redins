@@ -33,10 +33,7 @@ func GetEnvironmentVariableAsInteger(key string, fallback int) int {
 	if !exists {
 		newValue = fallback
 	} else {
-		value, err := strconv.Atoi(value)
-		if err != nil {
-			newValue = fallback
-		}
+		value, _ := strconv.Atoi(value)
 		newValue = value
 	}
 	return newValue
