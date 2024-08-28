@@ -1,34 +1,40 @@
+# syntax = docker/dockerfile:experimental
 #
 # Builder
 #
 
-FROM golang:1.17 as builder
+FROM golang:1.23-alpine AS builder
 
-WORKDIR /workspace
-# Copy the Go Modules manifests
-COPY go.mod go.mod
-COPY go.sum go.sum
-# cache deps before building and copying source so that we don't need to re-download as much
-# and so that source changes don't invalidate our downloaded layer
-RUN go mod download
+# set working directorydoc
+RUN mkdir -p /go/src/redins
+WORKDIR /go/src/redins
 
-# Copy the go source
+# load dependency
+COPY go.mod .
+COPY go.sum .
+RUN --mount=type=cache,target=/go/mod go mod download
+
+# copy sources
 COPY . .
-# Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a
+
+# build
+RUN make
+
+#
+# ------ get latest CA certificates
+#
+FROM alpine:3.20 as certs
+RUN apk --update add ca-certificates
 
 #
 # Runtime
 #
-FROM ubuntu:focal
+FROM scratch
 
-RUN apt-get update \
-  && apt-get install --yes ca-certificates \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+# copy CA certificates
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
-WORKDIR /
-
-COPY --from=builder /workspace/redins .
+# this is the last command since it's never cached
+COPY --from=builder /go/src/redins/.bin/github.com/ealebed/redins/redins /redins
 
 CMD ["/redins"]
