@@ -6,7 +6,7 @@ import (
 )
 
 // GetEnvironmentVariableAsString returns environment variable as a string
-func GetEnvironmentVariableAsString(key string, fallback string) string {
+func GetEnvironmentVariableAsString(key, fallback string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
 		value = fallback
