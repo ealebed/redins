@@ -23,7 +23,7 @@ type redisClient struct {
 }
 
 // InitRedisClient initialize redisClient
-func InitRedisClient(redisAddr string, redisPasswd string, redisDb int) *redisClient {
+func InitRedisClient(redisAddr, redisPasswd string, redisDb int) *redisClient {
 	client := &redisClient{
 		Addr:       redisAddr,
 		Password:   redisPasswd,
@@ -66,7 +66,7 @@ func (c *redisClient) Disconnect() error {
 }
 
 // SetValue writes value to Redis
-func (c *redisClient) SetValue(key string, value string) error {
+func (c *redisClient) SetValue(key, value string) error {
 	err := c.connection.Set(key, value, 0).Err()
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (c *redisClient) SetValue(key string, value string) error {
 // QueryValue returns key value from Redis (as a plain string)
 func (c *redisClient) QueryValue(key string) string {
 	if val, err := c.connection.Get(key).Result(); err != nil {
-		return fmt.Sprintf("Error happend with %v\n", err)
+		return fmt.Sprintf("Error happened with %v\n", err)
 	} else {
 		return fmt.Sprintf("Query key '%s', get return value '%s'\n", key, val)
 	}

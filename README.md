@@ -28,7 +28,7 @@ export IN_CLUSTER=false
 # run controller in cluster
 kubectl apply -f deployment/deployment.yaml
 ```
- 
+
 ## What happens under the hood?
 
 Controller connects to a Kubernetes cluster, sets up an informer for Pods in default namespace and with label selector `"app=ads-redis-statistic"`, and then starts the Informer run loop. When pods with matched criteria (and the initial warmup of pods when the Store syncs) are added to the cluster, controller initialize redis client, connect to provided redis-server, set key/value in database, get and print key/value from DB, and finally close connection to redis-server.

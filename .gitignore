@@ -1,23 +1,93 @@
-redins
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-config
+# Test binary, built with `go test -c`
+*.test
 
-.cover
-**/.cover
-.git
-.gtm
+# Output of the go coverage tool
+*.out
+.cover/
+**/.cover/
+coverage.out
+coverage.html
+coverage.txt
 
-.idea
-**/.vscode
+# Go workspace file
+go.work
+go.work.sum
+
+# Build artifacts
+.bin/
+**/.bin/
+/bin/
+/build/
+dist/
+
+# IDE - VSCode
+.vscode/
+**/.vscode/
 *.code-workspace
 
-.bin
-**/.bin
-**/test
-**/bin
-**/*-bundle.yaml
-.env
+# IDE - GoLand/IntelliJ
+.idea/
+**/.idea/
 
+# IDE - Vim
+*.swp
+*.swo
+*~
+
+# IDE - Emacs
+*~
+\#*\#
+.\#*
+
+# OS - macOS
+.DS_Store
 **/.DS_Store
+.AppleDouble
+.LSOverride
+
+# OS - Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# OS - Linux
+*~
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Debug files
+debug
+debug.test
 **/debug
 **/debug.test
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.zip
+**/*.zip
+
+# Project-specific
+redins
+config
+**/test/
+**/*-bundle.yaml
+.gtm
+
+# Pre-commit
+.pre-commit-config.yaml.bak
+
+# Cursor AI (optional - uncomment if you don't want to track Cursor-specific files)
+.cursor/
