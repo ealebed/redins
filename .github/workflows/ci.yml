@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+
+      - name: 'Go fmt check'
+        run: |
+          fmt_out=$(gofmt -s -l .)
+          if [ -n "$fmt_out" ]; then
+            echo "::error::run gofmt -s on these files:"
+            echo "$fmt_out"
+            exit 1
+          fi
+
+      - name: 'Go vet'
+        run: go vet ./...
+
+      - name: 'golangci lint'
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.7
+          args: --timeout 4m --config .golangci.yaml
+
+      - name: 'Test (race)'
+        run: go test ./... -race
