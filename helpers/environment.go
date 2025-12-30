@@ -28,13 +28,13 @@ func GetEnvironmentVariableAsBool(key string, fallback bool) bool {
 
 // GetEnvironmentVariableAsInteger returns environment variable as an integer
 func GetEnvironmentVariableAsInteger(key string, fallback int) int {
-	var newValue int
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		newValue = fallback
-	} else {
-		value, _ := strconv.Atoi(value)
-		newValue = value
+		return fallback
 	}
-	return newValue
+	parsedValue, err := strconv.Atoi(value)
+	if err != nil {
+		return fallback
+	}
+	return parsedValue
 }
