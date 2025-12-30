@@ -23,7 +23,7 @@ RUN make
 #
 # ------ get latest CA certificates
 #
-FROM alpine:3.20 as certs
+FROM alpine:3.23 as certs
 RUN apk --update add ca-certificates
 
 #
