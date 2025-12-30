@@ -7,7 +7,7 @@ GOLANGCI_LINT := golangci-lint
 BIN := bin/redins
 
 .PHONY: all
-all: fmt lint test build
+all: fmt lint test-race build
 
 .PHONY: build
 build:
@@ -31,6 +31,10 @@ lint:
 
 .PHONY: test
 test:
+	$(GO) test ./...
+
+.PHONY: test-race
+test-race:
 	$(GO) test ./... -race
 
 .PHONY: clean
@@ -59,7 +63,8 @@ help:
 	@echo "  install  - install the binary"
 	@echo "  fmt      - format code with gofmt and goimports"
 	@echo "  lint     - run golangci-lint"
-	@echo "  test     - run tests with race detector"
+	@echo "  test     - run tests"
+	@echo "  test-race - run tests with race detector"
 	@echo "  clean    - clean build artifacts"
 	@echo "  image    - build and push Docker image"
 	@echo "  update   - update dependencies"
