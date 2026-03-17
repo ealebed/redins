@@ -20,8 +20,10 @@ repos:
       - id: go-unit-tests
         args: [-race]
 
-  - repo: https://github.com/golangci/golangci-lint
-    rev: v2.7.0
+  - repo: local
     hooks:
       - id: golangci-lint
-        args: [--timeout=4m, --config=.golangci.yaml]
+        name: golangci-lint
+        entry: bash -c 'golangci-lint run --timeout=4m --config=.golangci.yaml'
+        language: system
+        pass_filenames: false
