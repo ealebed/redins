@@ -1,0 +1,57 @@
+# Approve and squash-auto-merge Dependabot minor/patch PRs using a GitHub App.
+# GITHUB_TOKEN / github-actions[bot] is not used for review or merge: that
+# identity is not a CODEOWNER, and Dependabot-triggered jobs get a read-only
+# token plus Dependabot secrets only.
+# Sources:
+#   https://docs.github.com/en/code-security/tutorials/secure-your-dependencies/automate-dependabot-with-actions
+#   https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-on-actions
+#   https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/making-authenticated-api-requests-with-a-github-app-in-a-github-actions-workflow
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub App token
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-minor' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          # Secrets (not vars): Dependabot-triggered pull_request jobs only
+          # receive Dependabot secrets. Use the same names in both secret stores.
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Approve and enable auto-merge
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-minor' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"

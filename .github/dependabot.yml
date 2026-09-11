@@ -6,6 +6,8 @@ updates:
       interval: "daily"
     assignees:
       - "ealebed"
+    labels:
+      - "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -13,6 +15,8 @@ updates:
       interval: "daily"
     assignees:
       - "ealebed"
+    labels:
+      - "dependencies"
 
   - package-ecosystem: "docker"
     directory: "/"
@@ -20,3 +24,5 @@ updates:
       interval: "daily"
     assignees:
       - "ealebed"
+    labels:
+      - "dependencies"

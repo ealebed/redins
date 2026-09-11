@@ -1,0 +1,5 @@
+# Review requests go to @ealebed. Branch protection does not require a
+# code-owner approval: GitHub Apps cannot satisfy that gate.
+# Merge gating is one approving review plus required CI checks, so the
+# automerger GitHub App can approve Dependabot minor/patch PRs.
+* @ealebed

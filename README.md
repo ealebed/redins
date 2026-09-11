@@ -29,6 +29,9 @@ export IN_CLUSTER=false
 kubectl apply -f deployment/deployment.yaml
 ```
 
+## Dependabot automation
+Minor and patch Dependabot PRs are approved and squash-merged by a GitHub App after required CI passes. See [Dependabot automation](./docs/dependabot-automation.md).
+
 ## What happens under the hood?
 
 Controller connects to a Kubernetes cluster, sets up an informer for Pods in default namespace and with label selector `"app=ads-redis-statistic"`, and then starts the Informer run loop. When pods with matched criteria (and the initial warmup of pods when the Store syncs) are added to the cluster, controller initialize redis client, connect to provided redis-server, set key/value in database, get and print key/value from DB, and finally close connection to redis-server.
